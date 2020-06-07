@@ -1,4 +1,4 @@
-package org.openchat.infrastructure.json;
+package org.openchat.api;
 
 import static org.eclipse.jetty.http.HttpStatus.CREATED_201;
 
@@ -7,6 +7,7 @@ import com.eclipsesource.json.JsonObject;
 import org.openchat.domain.users.RegistrationData;
 import org.openchat.domain.users.User;
 import org.openchat.domain.users.UserService;
+import org.openchat.json.UserJson;
 import spark.Request;
 import spark.Response;
 
@@ -24,16 +25,6 @@ public class UsersAPI {
     response.status(CREATED_201);
     response.type("application/json");
     return UserJson.jsonFor(user);
-  }
-
-  public static class UserJson {
-    public static String jsonFor(User user){
-      return new JsonObject()
-          .add("id", user.id())
-          .add("username", user.username())
-          .add("about", user.about())
-          .toString();
-    }
   }
 
   private RegistrationData registrationDataFrom(Request request) {
