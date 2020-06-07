@@ -46,7 +46,7 @@ public class UsersAPIShould {
   private UsersAPI usersAPI;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() throws UsernameAlreadyInUseException {
     usersAPI = new UsersAPI(userService);
     given(request.body()).willReturn(jsonContaining(REGISTRATION_DATA));
     given(userService.createUser(REGISTRATION_DATA)).willReturn(USER);
