@@ -1,4 +1,4 @@
-package org.openchat.api;
+package org.openchat.infrastructure.json;
 
 import static org.eclipse.jetty.http.HttpStatus.CREATED_201;
 
@@ -26,7 +26,7 @@ public class UsersAPI {
     return UserJson.jsonFor(user);
   }
 
-  private static class UserJson {
+  public static class UserJson {
     public static String jsonFor(User user){
       return new JsonObject()
           .add("id", user.id())

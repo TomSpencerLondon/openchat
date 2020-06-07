@@ -15,7 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.openchat.domain.users.RegistrationData;
 import org.openchat.domain.users.User;
 import org.openchat.domain.users.UserService;
-import org.openchat.infrastructure.builders.UserBuilder;
+import org.openchat.infrastructure.json.UsersAPI;
 import spark.Request;
 import spark.Response;
 
