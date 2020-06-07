@@ -3,6 +3,7 @@ package org.openchat.api;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.openchat.infrastructure.builders.UserBuilder.aUser;
 
 import com.eclipsesource.json.JsonObject;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.openchat.domain.users.RegistrationData;
 import org.openchat.domain.users.User;
 import org.openchat.domain.users.UserService;
+import org.openchat.infrastructure.builders.UserBuilder;
 import spark.Request;
 import spark.Response;
 
@@ -25,7 +27,11 @@ public class UsersAPIShould {
   private static final String ABOUT = "About Alice";
   private static final RegistrationData REGISTRATION_DATA = new RegistrationData(USERNAME, PASSWORD, ABOUT);
   private static final String USER_ID = UUID.randomUUID().toString();
-  private static final User USER = new User(USER_ID, USERNAME, PASSWORD, ABOUT);
+  private static final User USER = aUser()
+      .withId(USER_ID)
+      .withUsername(USERNAME)
+      .withPassword(PASSWORD)
+      .withAbout(ABOUT).build();
 
   @Mock
   Request request;
