@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.openchat.domain.users.RegistrationData;
+import org.openchat.domain.users.User;
 import org.openchat.domain.users.UserService;
 import spark.Request;
 import spark.Response;
@@ -21,6 +22,7 @@ public class UsersAPIShould {
   private static final String PASSWORD = "password";
   private static final String ABOUT = "About Alice";
   private static final RegistrationData REGISTRATION_DATA = new RegistrationData(USERNAME, PASSWORD, ABOUT);
+  private static final User USER = new User();
 
   @Mock
   Request request;
@@ -47,6 +49,18 @@ public class UsersAPIShould {
     verify(userService).createUser(REGISTRATION_DATA);
   }
 
+  @Test
+  public void return_json_representing_a_newly_created_user() {
+    given(request.body()).willReturn(jsonContaining(REGISTRATION_DATA));
+    given(userService.createUser(REGISTRATION_DATA)).willReturn(USER);
+
+    String result = usersAPI.createUser(request, response);
+
+    verify(response).status(201);
+    verify(response).type("appliation/json");
+    assertThat(result).isEqualTo(jsonContaining(USER));
+  }
+
   private String jsonContaining(RegistrationData registrationData) {
     return new JsonObject()
         .add("username", registrationData.username())
@@ -54,5 +68,4 @@ public class UsersAPIShould {
         .add("about", registrationData.about())
         .toString();
   }
-
 }
