@@ -15,7 +15,7 @@ public class UserServiceShould {
 
   @Test
   public void create_a_user() {
-    // TODO: OpenChat Video 1: 7:23 to go
+    // TODO: OpenChat Video 1: 7:23 to end
     given(idGenerator.next()).willReturn(USER_ID);
 
     User result = userService.createUser(REGISTRATION_DATA);
