@@ -1,9 +1,8 @@
 package org.openchat.domain.users;
 
-public class IdGenerator {
+public class UserRepository {
 
-  public String next() {
-//    return UUID.randomUUID().toString();
+  public void add(User user) {
     throw new UnsupportedOperationException("Implement me!");
   }
 }
