@@ -30,9 +30,8 @@ public class UserServiceShould {
 
   private UserService userService;
 
-
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     userService = new UserService(idGenerator, userRepository);
   }
 

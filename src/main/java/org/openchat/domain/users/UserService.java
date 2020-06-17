@@ -7,7 +7,6 @@ public class UserService {
   private final UserRepository userRepository;
 
   public UserService(IdGenerator idGenerator, UserRepository userRepository) {
-
     this.idGenerator = idGenerator;
     this.userRepository = userRepository;
   }
