@@ -13,10 +13,14 @@ public class UserService {
 
   public User createUser(RegistrationData registrationData) throws UsernameAlreadyInUseException {
       String userId = idGenerator.next();
-      User user = new User(userId, registrationData.username(),
-          registrationData.password(),
-          registrationData.about());
+      User user = createUserFrom(userId, registrationData);
       userRepository.add(user);
       return user;
+  }
+
+  private User createUserFrom(String userId, RegistrationData registrationData) {
+    return new User(userId, registrationData.username(),
+        registrationData.password(),
+        registrationData.about());
   }
 }
