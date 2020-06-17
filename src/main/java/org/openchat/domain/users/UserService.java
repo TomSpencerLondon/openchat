@@ -20,7 +20,7 @@ public class UserService {
   }
 
   private void validateUsername(String username) throws UsernameAlreadyInUseException {
-    if(userRepository.isUserNameTaken(username)){
+    if(userRepository.isUsernameTaken(username)){
       throw new UsernameAlreadyInUseException();
     }
   }
