@@ -15,7 +15,7 @@ public class UserRepositoryShould {
 
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     userRepository = new UserRepository();
   }
 
