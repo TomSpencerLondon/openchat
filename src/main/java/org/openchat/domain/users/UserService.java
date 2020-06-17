@@ -12,10 +12,17 @@ public class UserService {
   }
 
   public User createUser(RegistrationData registrationData) throws UsernameAlreadyInUseException {
+      validateUsername(registrationData.username());
       String userId = idGenerator.next();
       User user = createUserFrom(userId, registrationData);
       userRepository.add(user);
       return user;
+  }
+
+  private void validateUsername(String username) throws UsernameAlreadyInUseException {
+    if(userRepository.isUserNameTaken(username)){
+      throw new UsernameAlreadyInUseException();
+    }
   }
 
   private User createUserFrom(String userId, RegistrationData registrationData) {
