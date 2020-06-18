@@ -1,5 +1,6 @@
 package org.openchat.api;
 
+import static org.eclipse.jetty.http.HttpStatus.NOT_FOUND_404;
 import static org.eclipse.jetty.http.HttpStatus.OK_200;
 
 import com.eclipsesource.json.Json;
@@ -23,9 +24,13 @@ public class LoginAPI {
   public String login(Request request, Response response) {
     UserCredentials credentials = credentialsFrom(request);
     Optional<User> user = userRepository.userFor(credentials);
-    response.status(OK_200);
-    response.type("application/json");
-    return UserJson.jsonFor(user.get());
+    if (user.isPresent()) {
+      response.status(OK_200);
+      response.type("application/json");
+      return UserJson.jsonFor(user.get());
+    }
+    response.status(NOT_FOUND_404);
+    return "Invalid credentials.";
   }
 
   private UserCredentials credentialsFrom(Request req) {

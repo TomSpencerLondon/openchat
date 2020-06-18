@@ -1,5 +1,6 @@
 package org.openchat.api;
 
+import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -52,6 +53,16 @@ public class LoginAPIShould {
     assertThat(result).isEqualTo(jsonContaining(USER));
   }
 
+  @Test
+  public void return_an_error_when_credentials_are_invalid() {
+    given(request.body()).willReturn(jsonContaining(USER_CREDENTIALS));
+    given(userRepository.userFor(USER_CREDENTIALS)).willReturn(empty());
+
+    String result = loginAPI.login(request, response);
+    verify(response).status(404);
+    assertThat(result).isEqualTo("Invalid credentials.");
+  }
+
   private String jsonContaining(User user) {
     return new JsonObject()
         .add("id", user.id())
@@ -60,7 +71,6 @@ public class LoginAPIShould {
         .toString();
   }
 
-  // TODO: Currently on 39:19 E2
   private String jsonContaining(UserCredentials userCredentials) {
     return new JsonObject()
                   .add("username", userCredentials.getUsername())
