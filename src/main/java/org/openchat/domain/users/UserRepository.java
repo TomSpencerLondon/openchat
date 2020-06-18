@@ -2,6 +2,8 @@ package org.openchat.domain.users;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import org.openchat.api.domain.users.UserCredentials;
 
 public class UserRepository {
 
@@ -14,5 +16,9 @@ public class UserRepository {
   public Boolean isUsernameTaken(String username) {
     return users.stream()
                 .anyMatch(user -> user.username().equals(username));
+  }
+
+  public Optional<User> userFor(UserCredentials userCredentials) {
+    throw new UnsupportedOperationException("Implement me!");
   }
 }

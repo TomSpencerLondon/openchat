@@ -1,11 +1,38 @@
 package org.openchat.api;
 
+import static org.eclipse.jetty.http.HttpStatus.OK_200;
+
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonObject;
+import java.util.Optional;
+import org.openchat.api.domain.users.UserCredentials;
+import org.openchat.domain.users.User;
+import org.openchat.domain.users.UserRepository;
+import org.openchat.json.UserJson;
 import spark.Request;
 import spark.Response;
 
 public class LoginAPI {
 
-  public String login(Request req, Response res) {
-    throw new UnsupportedOperationException("Implement me!");
+  private UserRepository userRepository;
+
+  public LoginAPI(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
+  public String login(Request request, Response response) {
+    UserCredentials credentials = credentialsFrom(request);
+    Optional<User> user = userRepository.userFor(credentials);
+    response.status(OK_200);
+    response.type("application/json");
+    return UserJson.jsonFor(user.get());
+  }
+
+  private UserCredentials credentialsFrom(Request req) {
+    JsonObject json = Json.parse(req.body()).asObject();
+    return new UserCredentials(
+        json.getString("username", ""),
+        json.getString("password", "")
+    );
   }
 }
