@@ -24,13 +24,20 @@ public class LoginAPI {
   public String login(Request request, Response response) {
     UserCredentials credentials = credentialsFrom(request);
     Optional<User> user = userRepository.userFor(credentials);
-    if (user.isPresent()) {
-      response.status(OK_200);
-      response.type("application/json");
-      return UserJson.jsonFor(user.get());
-    }
+    return user.isPresent()
+        ? prepareOKResponse(response, user)
+        : prepareErrorResponse(response);
+  }
+
+  private String prepareErrorResponse(Response response) {
     response.status(NOT_FOUND_404);
     return "Invalid credentials.";
+  }
+
+  private String prepareOKResponse(Response response, Optional<User> user) {
+    response.status(OK_200);
+    response.type("application/json");
+    return UserJson.jsonFor(user.get());
   }
 
   private UserCredentials credentialsFrom(Request req) {
