@@ -18,6 +18,7 @@ public class UserRepository {
                 .anyMatch(user -> user.username().equals(username));
   }
 
+  // TODO: Now on 44:20 E2
   public Optional<User> userFor(UserCredentials userCredentials) {
     throw new UnsupportedOperationException("Implement me!");
   }
