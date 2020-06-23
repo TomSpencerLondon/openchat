@@ -2,6 +2,7 @@ package org.openchat.api.domain.users;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.openchat.domain.users.User;
 
 public class UserCredentials {
 
@@ -45,5 +46,9 @@ public class UserCredentials {
         .append(username)
         .append(password)
         .toHashCode();
+  }
+
+  public boolean matches(User user) {
+    return username.equals(user.username()) && password.equals(user.password());
   }
 }
