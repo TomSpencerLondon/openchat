@@ -5,6 +5,7 @@ import static spark.Spark.options;
 import static spark.Spark.post;
 
 import org.openchat.api.LoginAPI;
+import org.openchat.api.PostsAPI;
 import org.openchat.api.UsersAPI;
 import org.openchat.domain.users.IdGenerator;
 import org.openchat.domain.users.UserRepository;
@@ -14,6 +15,7 @@ public class Routes {
 
     private UsersAPI usersAPI;
     private LoginAPI loginAPI;
+    private PostsAPI postsAPI;
 
     public void create() {
         createAPIS();
@@ -30,11 +32,11 @@ public class Routes {
         loginAPI = new LoginAPI(userRepository);
     }
 
-    // TODO: E2 - 59:23 still need to add users/:userId/timeline to postsAPI
     private void openchatRoutes() {
         get("status", (req, res) -> "OpenChat: OK!");
         post("users", (req, res) -> usersAPI.createUser(req, res));
         post("login", (req, res) -> loginAPI.login(req, res));
+        post("users/:userId/timeline", (req, res) -> postsAPI.createPost(req, res));
     }
 
     private void swaggerRoutes() {
