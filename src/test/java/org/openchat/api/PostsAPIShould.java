@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.openchat.domain.posts.InappropriateLanguageException;
 import org.openchat.domain.posts.Post;
 import org.openchat.domain.posts.PostService;
 import spark.Request;
@@ -43,7 +44,7 @@ public class PostsAPIShould {
   }
 
   @Test
-  public void create_a_post() {
+  public void create_a_post() throws InappropriateLanguageException {
     postsAPI.createPost(request, response);
     verify(postService).createPost(USER_ID, POST_TEXT);
   }
@@ -55,6 +56,14 @@ public class PostsAPIShould {
     verify(response).status(201);
     verify(response).type("application/json");
     assertThat(result).isEqualTo(jsonContaining(POST));
+  }
+
+  @Test
+  public void return_error_when_creating_a_post_with_inappropriate_language() throws InappropriateLanguageException {
+    given(postService.createPost(USER_ID, POST_TEXT)).willThrow(InappropriateLanguageException.class);
+    String result = postsAPI.createPost(request, response);
+    verify(response).status(400);
+    assertThat(result).isEqualTo("Post contains inappropriate language.");
   }
 
   private String jsonContaining(Post post) {

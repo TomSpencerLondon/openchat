@@ -1,10 +1,12 @@
 package org.openchat.api;
 
+import static org.eclipse.jetty.http.HttpStatus.BAD_REQUEST_400;
 import static org.eclipse.jetty.http.HttpStatus.CREATED_201;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
-import java.time.format.DateTimeFormatter;
+import org.openchat.api.infrastructure.json.PostJson;
+import org.openchat.domain.posts.InappropriateLanguageException;
 import org.openchat.domain.posts.Post;
 import org.openchat.domain.posts.PostService;
 import spark.Request;
@@ -23,7 +25,21 @@ public class PostsAPI {
   public String createPost(Request req, Response res) {
     String userId = req.params("userId");
     String text = postTextFrom(req);
-    Post post = postService.createPost(userId, text);
+
+    try {
+      Post post = postService.createPost(userId, text);
+      return prepareOKResponse(post);
+    } catch (InappropriateLanguageException e) {
+      return prepareErrorResponse();
+    }
+  }
+
+  private String prepareErrorResponse() {
+    response.status(BAD_REQUEST_400);
+    return "Post contains inappropriate language.";
+  }
+
+  private String prepareOKResponse(Post post) {
     response.status(CREATED_201);
     response.type("application/json");
     return PostJson.toJson(post);
@@ -34,15 +50,4 @@ public class PostsAPI {
     return json.getString("text", "");
   }
 
-  private static class PostJson {
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    public static String toJson(Post post) {
-      return new JsonObject()
-                    .add("postId", post.postId())
-                    .add("userId", post.userId())
-                    .add("text", post.text())
-                    .add("dateTime", formatter.format(post.dateTime()))
-                    .toString();
-    }
-  }
 }
