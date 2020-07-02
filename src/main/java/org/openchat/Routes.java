@@ -7,6 +7,7 @@ import static spark.Spark.post;
 import org.openchat.api.LoginAPI;
 import org.openchat.api.PostsAPI;
 import org.openchat.api.UsersAPI;
+import org.openchat.domain.posts.PostService;
 import org.openchat.domain.users.IdGenerator;
 import org.openchat.domain.users.UserRepository;
 import org.openchat.domain.users.UserService;
@@ -28,8 +29,10 @@ public class Routes {
         UserRepository userRepository = new UserRepository();
 
         UserService userService = new UserService(idGenerator, userRepository);
+        PostService postService = new PostService();
         usersAPI = new UsersAPI(userService);
         loginAPI = new LoginAPI(userRepository);
+        postsAPI = new PostsAPI(postService);
     }
 
     private void openchatRoutes() {

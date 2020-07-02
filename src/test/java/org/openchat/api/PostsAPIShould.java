@@ -36,8 +36,8 @@ public class PostsAPIShould {
   private PostService postService;
 
   @Before
-  public void setUp() throws Exception {
-    postsAPI = new PostsAPI(postService, response);
+  public void setUp() throws InappropriateLanguageException {
+    postsAPI = new PostsAPI(postService);
     given(request.params("userId")).willReturn(USER_ID);
     given(request.body()).willReturn(jsonContaining(POST_TEXT));
     given(postService.createPost(USER_ID, POST_TEXT)).willReturn(POST);
